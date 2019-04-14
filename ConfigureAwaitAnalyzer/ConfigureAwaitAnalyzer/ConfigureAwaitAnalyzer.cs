@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -20,6 +21,8 @@ namespace ConfigureAwaitAnalyzer
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
+        private static readonly Regex regex = new Regex("^*.ConfigureAwait\\((true|false)\\)$", RegexOptions.Compiled);
+
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.AwaitExpression);
@@ -33,7 +36,7 @@ namespace ConfigureAwaitAnalyzer
             var node = (AwaitExpressionSyntax)context.Node;
             var exprStr = node.ToString();
 
-            if (exprStr.EndsWith(".ConfigureAwait(true)") || exprStr.EndsWith(".ConfigureAwait(false)"))
+            if(regex.IsMatch(exprStr))
                 return;
 
             context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation(), node.ToString()));
