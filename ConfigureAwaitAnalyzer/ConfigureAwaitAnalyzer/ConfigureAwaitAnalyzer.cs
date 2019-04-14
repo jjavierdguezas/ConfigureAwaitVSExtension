@@ -22,7 +22,7 @@ namespace ConfigureAwaitAnalyzer
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.AwaitExpression);
         }
 
         private static void AnalyzeNode(SyntaxNodeAnalysisContext context)
@@ -30,16 +30,13 @@ namespace ConfigureAwaitAnalyzer
             if (context.Compilation.GetDiagnostics().Any(issue => issue.Severity == DiagnosticSeverity.Error || issue.IsWarningAsError))
                 return;
 
-            var node = (InvocationExpressionSyntax)context.Node;
+            var node = (AwaitExpressionSyntax)context.Node;
             var exprStr = node.ToString();
 
-            if (node.Parent is AwaitExpressionSyntax && !exprStr.EndsWith(".ConfigureAwait(true)") && !exprStr.EndsWith(".ConfigureAwait(false)"))
-            {
-                //var parent = (AwaitExpressionSyntax)node.Parent;
-                //var awaitExpressionInfo = context.SemanticModel.GetAwaitExpressionInfo(parent);
+            if (exprStr.EndsWith(".ConfigureAwait(true)") || exprStr.EndsWith(".ConfigureAwait(false)"))
+                return;
 
-                context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation(), node.ToString()));
-            }
+            context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation(), node.ToString()));
         }
     }
 }
