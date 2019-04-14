@@ -102,5 +102,17 @@ namespace ConfigureAwaitAnalyzer
                 return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
         }
+
+
+        /// <summary>
+        ///   Looks up a localized string similar to Type name contains lowercase letters.
+        /// </summary>
+        internal static string AddConfigureAwaitTitleFormat
+        {
+            get
+            {
+                return ResourceManager.GetString("AddConfigureAwaitTitleFormat", resourceCulture);
+            }
+        }
     }
 }

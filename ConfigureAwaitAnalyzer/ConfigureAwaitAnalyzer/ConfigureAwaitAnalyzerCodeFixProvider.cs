@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -10,15 +8,17 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace ConfigureAwaitAnalyzer
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ConfigureAwaitAnalyzerCodeFixProvider)), Shared]
     public class ConfigureAwaitAnalyzerCodeFixProvider : CodeFixProvider
     {
-        private const string title = "Make uppercase";
+        private static readonly LocalizableString AddConfigureAwaitTitleFormat = new LocalizableResourceString(nameof(Resources.AddConfigureAwaitTitleFormat), Resources.ResourceManager, typeof(Resources));
+
+        private static readonly string AddConfigureAwaitFalseTitle = string.Format(AddConfigureAwaitTitleFormat.ToString(), "false");
+        private static readonly string AddConfigureAwaitTrueTitle = string.Format(AddConfigureAwaitTitleFormat.ToString(), "true");
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
@@ -27,7 +27,6 @@ namespace ConfigureAwaitAnalyzer
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
-            // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
             return WellKnownFixAllProviders.BatchFixer;
         }
 
@@ -35,39 +34,73 @@ namespace ConfigureAwaitAnalyzer
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-            // TODO: Replace the following code with your own analysis, generating a CodeAction for each fix to suggest
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            // Find the type declaration identified by the diagnostic.
-            var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
+            var awaitExpr = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<AwaitExpressionSyntax>().First();
 
-            // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
                 CodeAction.Create(
-                    title: title,
-                    createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c),
-                    equivalenceKey: title),
+                    title: AddConfigureAwaitFalseTitle,
+                    createChangedDocument: c => AddConfigureAwaitFalseAsync(context.Document, awaitExpr, c),
+                    equivalenceKey: AddConfigureAwaitFalseTitle),
+                diagnostic);
+
+            context.RegisterCodeFix(
+                CodeAction.Create(
+                    title: AddConfigureAwaitTrueTitle,
+                    createChangedDocument: c => AddConfigureAwaitTrueAsync(context.Document, awaitExpr, c),
+                    equivalenceKey: AddConfigureAwaitTrueTitle),
                 diagnostic);
         }
 
-        private async Task<Solution> MakeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
+        private async Task<Document> AddConfigureAwaitFalseAsync(Document document, AwaitExpressionSyntax awaitExpr, CancellationToken cancellationToken)
         {
-            // Compute new uppercase name.
-            var identifierToken = typeDecl.Identifier;
-            var newName = identifierToken.Text.ToUpperInvariant();
+            // Add an annotation to format the new node.
+            var formatted = AddConfigureAwait(awaitExpr).WithAdditionalAnnotations(Formatter.Annotation);
 
-            // Get the symbol representing the type to be renamed.
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-            var typeSymbol = semanticModel.GetDeclaredSymbol(typeDecl, cancellationToken);
+            // Replace the old node with the new node.
+            var oldRoot = await document.GetSyntaxRootAsync(cancellationToken);
+            var newRoot = oldRoot.ReplaceNode(awaitExpr, formatted);
 
-            // Produce a new solution that has all references to that type renamed, including the declaration.
-            var originalSolution = document.Project.Solution;
-            var optionSet = originalSolution.Workspace.Options;
-            var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
+            // Return document with transformed tree.
+            return document.WithSyntaxRoot(newRoot);
+        }
 
-            // Return the new solution with the now-uppercase type name.
-            return newSolution;
+        private async Task<Document> AddConfigureAwaitTrueAsync(Document document, AwaitExpressionSyntax awaitExpr, CancellationToken cancellationToken)
+        {
+            // Add an annotation to format the new node.
+            var formatted = AddConfigureAwait(awaitExpr, true).WithAdditionalAnnotations(Formatter.Annotation);
+
+            // Replace the old node with the new node.
+            var oldRoot = await document.GetSyntaxRootAsync(cancellationToken);
+            var newRoot = oldRoot.ReplaceNode(awaitExpr, formatted);
+
+            // Return document with transformed tree.
+            return document.WithSyntaxRoot(newRoot);
+        }
+
+        private AwaitExpressionSyntax AddConfigureAwait(AwaitExpressionSyntax awaitExpr, bool passTrueArg = false)
+        {
+            var firstToken = awaitExpr.GetFirstToken();
+            var leadingTrivia = firstToken.LeadingTrivia;
+
+            var kind = passTrueArg ? SyntaxKind.TrueLiteralExpression : SyntaxKind.FalseLiteralExpression;
+
+            var configureAwait = SyntaxFactory.InvocationExpression(
+                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                        awaitExpr.Expression,
+                        SyntaxFactory.IdentifierName("ConfigureAwait")
+                    ),
+                    SyntaxFactory.ArgumentList(
+                        SyntaxFactory.Token(SyntaxKind.OpenParenToken),
+                        SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(SyntaxFactory.LiteralExpression(kind)) }),
+                        SyntaxFactory.Token(SyntaxKind.CloseParenToken
+                        )
+                    )
+                );
+
+            return SyntaxFactory.AwaitExpression(configureAwait).WithLeadingTrivia(leadingTrivia);
         }
     }
 }

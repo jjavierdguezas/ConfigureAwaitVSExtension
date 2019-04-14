@@ -117,16 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddConfigureAwaitTitleFormat" xml:space="preserve">
+    <value>Add 'ConfigureAwait({0})'</value>
+    <comment>Añadir 'ConfigureAwait({0})'</comment>
+  </data>
   <data name="AnalyzerDescription" xml:space="preserve">
     <value>Remainder that await calls should configure an awaiter.</value>
     <comment>Recordatiorio de que las llamadas con await deben configurar un awaiter</comment>
   </data>
   <data name="AnalyzerMessageFormat" xml:space="preserve">
-    <value>'{0}' call maybe needs to configure an awaiter</value>
-    <comment>la llamada 'await {0}' quizas deba configurar un awaiter</comment>
+    <value>Maybe '{0}' call needs to configure an awaiter</value>
+    <comment>La llamada '{0}' quizás deba configurar un awaiter</comment>
   </data>
   <data name="AnalyzerTitle" xml:space="preserve">
-    <value>await call should configure an awaiter</value>
-    <comment>llamadas await deben configurar un awaiter</comment>
+    <value>await calls should configure an awaiter</value>
+    <comment>Llamadas await deben configurar un awaiter</comment>
   </data>
 </root>
