@@ -22,7 +22,7 @@ namespace ConfigureAwaitAnalyzer
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(ConfigureAwaitAnalyzerAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(ConfigureAwaitAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnalyzerDescription" xml:space="preserve">
-    <value>Type names should be all uppercase.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
+    <value>Remainder that await calls should configure an awaiter.</value>
+    <comment>Recordatiorio de que las llamadas con await deben configurar un awaiter</comment>
   </data>
   <data name="AnalyzerMessageFormat" xml:space="preserve">
-    <value>Type name '{0}' contains lowercase letters</value>
-    <comment>The format-able message the diagnostic displays.</comment>
+    <value>'await {0}' call maybe needs to configure an awaiter</value>
+    <comment>la llamada 'await {0}' quizas deba configurar un awaiter</comment>
   </data>
   <data name="AnalyzerTitle" xml:space="preserve">
-    <value>Type name contains lowercase letters</value>
-    <comment>The title of the diagnostic.</comment>
+    <value>await call should configure an awaiter</value>
+    <comment>llamadas await deben configurar un awaiter</comment>
   </data>
 </root>

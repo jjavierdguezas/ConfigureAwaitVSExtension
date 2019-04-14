@@ -76,7 +76,7 @@ namespace ConfigureAwaitAnalyzer.Test
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new ConfigureAwaitAnalyzerAnalyzer();
+            return new ConfigureAwaitAnalyzer();
         }
     }
 }
