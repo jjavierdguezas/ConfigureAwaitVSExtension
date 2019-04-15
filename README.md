@@ -38,7 +38,7 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
   ```csharp
   var task = MethodAsync().ConfigureAwait(false);
   var result = await task;  // <- this generates an unnecesary warning
-                ~~~~~~~~~~~
+               ~~~~~~~~~~~
   ```
 
 - Maybe do something smarter than just check the suffix on the `string` representation
