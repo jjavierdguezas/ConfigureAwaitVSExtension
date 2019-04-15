@@ -10,16 +10,18 @@
     <PackageId>ConfigureAwaitAnalyzer</PackageId>
     <PackageVersion>1.0.0.0</PackageVersion>
     <Authors>JJ</Authors>
-    <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
-    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <!--<PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>-->
+    <!--<PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>-->
+    <RepositoryUrl>https://github.com/jjavierdguezas/ConfigureAwaitVSExtension</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>ConfigureAwaitAnalyzer</Description>
-    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-    <Copyright>Copyright</Copyright>
-    <PackageTags>ConfigureAwaitAnalyzer, analyzers</PackageTags>
+    <Description>A Visual Studio extension that warn to configure an awaiter in await calls</Description>
+    <PackageReleaseNotes>First version</PackageReleaseNotes>
+    <Copyright>Copyright (c) 2019 José Javier Rodríguez Zas</Copyright>
+    <PackageTags>ConfigureAwait, analyzers, code fix</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageLicenseExpression>https://github.com/jjavierdguezas/ConfigureAwaitVSExtension/blob/master/LICENSE</PackageLicenseExpression>
+    <RepositoryType>github</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
