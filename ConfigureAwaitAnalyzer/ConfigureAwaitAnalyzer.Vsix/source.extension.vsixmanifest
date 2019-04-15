@@ -3,7 +3,7 @@
   <Metadata>
     <Identity Id="ConfigureAwaitAnalyzer.bc701ab2-6051-483e-9efc-c55faf88c90f" Version="1.0" Language="en-US" Publisher="JJ"/>
     <DisplayName>ConfigureAwaitAnalyzer</DisplayName>
-    <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
+    <Description xml:space="preserve">A Visual Studio extension that warn to configure an awaiter in await calls</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,)" />
