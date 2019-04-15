@@ -10,6 +10,8 @@ We always forget the `ConfigureAwait(...)`, so this extension warns us about thi
 I made this project just for fun. I'm sure there are some edge cases that I didn't take into account
 Meanwhile, enjoy it! 😉
 
+![extension gif](https://i.ibb.co/gSyXBgr/Configure-Await-Extension.gif)
+
 ## About the code
 
 I used the Visual Studio Extensibility Template _Analyzer with Code Fix (.NET Standard)_.
