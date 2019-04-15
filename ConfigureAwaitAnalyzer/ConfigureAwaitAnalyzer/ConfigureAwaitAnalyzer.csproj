@@ -20,7 +20,7 @@
     <Copyright>Copyright (c) 2019 José Javier Rodríguez Zas</Copyright>
     <PackageTags>ConfigureAwait, analyzers, code fix</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
-    <PackageLicenseExpression>https://github.com/jjavierdguezas/ConfigureAwaitVSExtension/blob/master/LICENSE</PackageLicenseExpression>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryType>github</RepositoryType>
   </PropertyGroup>
 
