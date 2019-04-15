@@ -2,7 +2,7 @@
 
 A Visual Studio extension that warn to configure an awaiter in await calls
 
-⚠️ this branch is for VS2019 only ⚠️
+⚠️ this branch is for VS2019 only ⚠️ if you want to try in VS2017 go to [master branch](https://github.com/jjavierdguezas/ConfigureAwaitVSExtension/tree/master)
 
 ## Motivation
 
@@ -14,7 +14,7 @@ Meanwhile, enjoy it! 😉
 
 I used the Visual Studio Extensibility Template _Analyzer with Code Fix (.NET Standard)_.
 In theory, this extension can be deployed as either a NuGet package or a VSIX extension.
-It was tested using Microsoft Visual Studio 2017 Version 15.9.11
+It was tested using Microsoft Visual Studio 2019 Version 16.0.1
 
 ### The `ConfigureAwaitAnalyzer`
 
@@ -46,16 +46,20 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
   - activate/deactivate the extension
   - change if the extension should report Warnings or Errors
 
-## Useful links for development:
+## Useful links for development
 
 - [Creating a .NET Standard Roslyn Analyzer in Visual Studio 2017](https://andrewlock.net/creating-a-roslyn-analyzer-in-visual-studio-2017/)
 - [Starting to Develop Visual Studio Extensions](https://docs.microsoft.com/en-us/visualstudio/extensibility/starting-to-develop-visual-studio-extensions?view=vs-2019)
 - [How To Write a C# Analyzer and Code Fix](https://github.com/dotnet/roslyn/wiki/How-To-Write-a-C%23-Analyzer-and-Code-Fix)
 - [How to upgrade extensions to support Visual Studio 2019](https://devblogs.microsoft.com/visualstudio/how-to-upgrade-extensions-to-support-visual-studio-2019/)
 
+## Releases
+
+If you want just the `*.vsix` file download it from [the releases](https://github.com/jjavierdguezas/ConfigureAwaitVSExtension/releases)
+
 ---
 Coded by JJ - 2019
 
-_Thanks to [@carlosbonillabirchman](https://github.com/carlosbonillabirchman)_ for talking me about this idea
+_Thanks to [@carlosbonillabirchman](https://github.com/carlosbonillabirchman)_ for telling me about this idea
 
 Licensed under the [MIT license](LICENSE)
