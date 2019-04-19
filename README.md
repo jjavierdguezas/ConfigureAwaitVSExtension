@@ -36,12 +36,23 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
 ## Todos
 
 - Check edge cases like:
-
-  ```csharp
-  var task = MethodAsync().ConfigureAwait(false);
-  var result = await task;  // <- this generates an unnecesary warning
-               ~~~~~~~~~~~
-  ```
+  - Await an already configured task (invoked as variable) :
+      ```csharp
+      var task = MethodAsync().ConfigureAwait(false);
+      var result = await task;  // <- this generates an unnecesary warning
+                   ~~~~~~~~~~~
+      ```
+  - Await calls in `Controller`'s `Action` in `ASP.NET Core` apps
+      ```csharp
+      class HomeController : Controller 
+      {
+            public async Task<IActionAsync> GetData()
+            {
+                return Ok(await GetDataAsync()) // <- this generates an unnecesary warning
+                          ~~~~~~~~~~~~~~~~~~~~
+            }
+      }
+      ```
 
 - Maybe do something smarter than just check the suffix on the `string` representation
 - Allow user settings to:
