@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,7 +21,7 @@ namespace ConfigureAwaitAnalyzer
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
-        private static readonly Regex regex = new Regex("^*.ConfigureAwait\\((true|false)\\)$", RegexOptions.Compiled);
+        private static readonly string AwaiterConfiguredType = typeof(ConfiguredTaskAwaitable).FullName;
 
         public override void Initialize(AnalysisContext context)
         {
@@ -34,11 +34,33 @@ namespace ConfigureAwaitAnalyzer
                 return;
 
             var node = (AwaitExpressionSyntax)context.Node;
-            var exprStr = node.ToString();
 
-            if(regex.IsMatch(exprStr))
+            var child = node.ChildNodes().First();
+
+            var typedNode = child is InvocationExpressionSyntax invocationExpr ? invocationExpr : child;
+
+            var info = context.SemanticModel.GetSymbolInfo(typedNode, context.CancellationToken).Symbol;
+
+            if (info is null)
                 return;
 
+            ITypeSymbol type = null;
+
+            if (info is IMethodSymbol methodSymbol)
+                type = methodSymbol.ReturnType;
+            else if (info is ILocalSymbol localSymbol)
+                type = localSymbol.Type;
+            else if (info is IParameterSymbol parameterSymbol)
+                type = parameterSymbol.Type;
+
+            if (type is null)
+                return;
+
+            var typeWithoutGenerics = $"{type.ContainingNamespace.ToDisplayString()}.{type.Name}";
+
+            if (Equals(typeWithoutGenerics, AwaiterConfiguredType))
+                return;
+                
             context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation(), node.ToString()));
         }
     }

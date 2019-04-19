@@ -366,6 +366,44 @@ namespace ConsoleApp2
             VerifyCSharpFix(test, fixtest);
         }
 
+        [TestMethod]
+        public void WhenAwaitAnAlreadyAwaitedVar_ThenNoDiagnostics()
+        {
+            var test = @"
+using System;
+using System.Threading.Tasks;
+
+namespace TestApp
+{
+    class Program
+    {
+        private static Task<int> Test()
+        {
+            return Task.FromResult(3);
+        }
+
+        private static async Task Run()
+        {
+            var task = Test().ConfigureAwait(false);
+            var r = await task;
+        }
+
+        static void Main()
+        {
+            try
+            {
+                Run().Wait();
+            }
+            catch
+            {
+            }
+        }
+    }
+}
+";
+            VerifyCSharpDiagnostic(test);
+        }
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new ConfigureAwaitAnalyzerCodeFixProvider();
