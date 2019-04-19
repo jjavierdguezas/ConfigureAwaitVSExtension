@@ -46,7 +46,7 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
       ```csharp
       class HomeController : Controller 
       {
-            public Task<IActionAsync> GetData()
+            public async Task<IActionAsync> GetData()
             {
                 return Ok(await GetDataAsync()) // <- this generates an unnecesary warning
                           ~~~~~~~~~~~~~~~~~~~~
