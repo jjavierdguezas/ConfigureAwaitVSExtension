@@ -26,7 +26,7 @@ That's it, just that
 
 ### The `ConfigureAwaitAnalyzerCodeFixProvider`
 
-It modifies the `AwaitExpressionSyntax`'`ExpressionNode` in order to add the `.ConfigureAwait([true|false])` expression nodes:
+It modifies the `AwaitExpressionSyntax`'s `ExpressionNode` in order to add the `.ConfigureAwait([true|false])` expression nodes:
 
 ![await expresion tree img](https://i.ibb.co/W2TzLsh/Await-Expression-Tree.png)
 
@@ -36,14 +36,25 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
 ## Todos
 
 - Check edge cases like:
+  - ~~Await an already configured task (invoked as variable) :~~
+      ```csharp
+      var task = MethodAsync().ConfigureAwait(false);
+      var result = await task;  // <- this generates an unnecesary warning
+                   ~~~~~~~~~~~
+      ```
+  - Await calls in `Controller`'s `Action` in `ASP.NET Core` apps
+      ```csharp
+      class HomeController : Controller 
+      {
+            public Task<IActionAsync> GetData()
+            {
+                return Ok(await GetDataAsync()) // <- this generates an unnecesary warning
+                          ~~~~~~~~~~~~~~~~~~~~
+            }
+      }
+      ```
 
-  ```csharp
-  var task = MethodAsync().ConfigureAwait(false);
-  var result = await task;  // <- this generates an unnecesary warning
-               ~~~~~~~~~~~
-  ```
-
-- Maybe do something smarter than just check the suffix on the `string` representation
+- ~~Maybe do something smarter than just check the suffix on the `string` representation~~
 - Allow user settings to:
   - activate/deactivate the extension
   - change if the extension should report Warnings or Errors
