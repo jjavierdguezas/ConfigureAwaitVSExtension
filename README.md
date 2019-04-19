@@ -21,8 +21,8 @@ It was tested using Microsoft Visual Studio 2017 Version 15.9.11
 ### The `ConfigureAwaitAnalyzer`
 
 It only runs if there are no compilation errors.
-It analyzes the `AwaitExpressionSyntax` nodes and check if their `string` representation ends with the text `".ConfigureAwait([true|false])"`
-That's it, just that
+It analyzes the `AwaitExpressionSyntax` nodes and check if their expression (method call or variable) is of type `ConfiguredTaskAwaitable`.
+That's it.
 
 ### The `ConfigureAwaitAnalyzerCodeFixProvider`
 
