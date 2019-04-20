@@ -17,17 +17,19 @@ namespace ConfigureAwaitAnalyzer
         private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 
-        private static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
         private static readonly string AwaiterConfiguredType = typeof(ConfiguredTaskAwaitable).FullName;
 
+        private const string AspNetCoreMvcControllerBaseFullName = "Microsoft.AspNetCore.Mvc.ControllerBase";
+
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(nodeContext =>
             {
-                INamedTypeSymbol aspNetCoreMvcControllerType = nodeContext.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Mvc.ControllerBase");
+                INamedTypeSymbol aspNetCoreMvcControllerType = nodeContext.Compilation.GetTypeByMetadataName(AspNetCoreMvcControllerBaseFullName);
                 AnalyzeNode(nodeContext, aspNetCoreMvcControllerType);
             }, SyntaxKind.AwaitExpression);
         }
