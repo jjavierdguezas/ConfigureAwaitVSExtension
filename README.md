@@ -64,6 +64,7 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
 - [Creating a .NET Standard Roslyn Analyzer in Visual Studio 2017](https://andrewlock.net/creating-a-roslyn-analyzer-in-visual-studio-2017/)
 - [Starting to Develop Visual Studio Extensions](https://docs.microsoft.com/en-us/visualstudio/extensibility/starting-to-develop-visual-studio-extensions?view=vs-2019)
 - [How To Write a C# Analyzer and Code Fix](https://github.com/dotnet/roslyn/wiki/How-To-Write-a-C%23-Analyzer-and-Code-Fix)
+- [Working with types in a Roslyn analyzer](https://www.meziantou.net/2019/02/04/working-with-types-in-a-roslyn-analyzer)
 
 ## Releases
 
