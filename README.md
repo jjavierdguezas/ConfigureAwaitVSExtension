@@ -42,7 +42,7 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
       var result = await task;  // <- this generates an unnecesary warning
                    ~~~~~~~~~~~
       ```
-  - Await calls in `Controller`'s `Action` in `ASP.NET Core` apps
+  - ~~Await calls in `Controller`'s `Action` in `ASP.NET Core` apps~~
       ```csharp
       class HomeController : Controller 
       {

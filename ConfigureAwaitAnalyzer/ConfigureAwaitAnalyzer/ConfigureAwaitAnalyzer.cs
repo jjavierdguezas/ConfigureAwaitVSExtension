@@ -25,17 +25,26 @@ namespace ConfigureAwaitAnalyzer
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.AwaitExpression);
+            context.RegisterSyntaxNodeAction(nodeContext =>
+            {
+                INamedTypeSymbol aspNetCoreMvcControllerType = nodeContext.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Mvc.ControllerBase");
+                AnalyzeNode(nodeContext, aspNetCoreMvcControllerType);
+            }, SyntaxKind.AwaitExpression);
         }
 
-        private static void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        private static void AnalyzeNode(SyntaxNodeAnalysisContext context, INamedTypeSymbol aspNetCoreMvcControllerType)
         {
             if (context.Compilation.GetDiagnostics().Any(issue => issue.Severity == DiagnosticSeverity.Error || issue.IsWarningAsError))
                 return;
 
+            bool isAspNetCore = !(aspNetCoreMvcControllerType is null);
+
+            if(isAspNetCore && IsAspNetCoreControllerContext(context, aspNetCoreMvcControllerType))
+                return;
+
             var node = (AwaitExpressionSyntax)context.Node;
 
-            var child = node.ChildNodes().First();
+            var child = node.Expression;
 
             var typedNode = child is InvocationExpressionSyntax invocationExpr ? invocationExpr : child;
 
@@ -62,6 +71,44 @@ namespace ConfigureAwaitAnalyzer
                 return;
                 
             context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation(), node.ToString()));
+        }
+
+        private static bool IsAspNetCoreControllerContext(SyntaxNodeAnalysisContext context, INamedTypeSymbol aspNetCoreMvcControllerType)
+        {
+            var node  = context.Node;   
+            while(!(node is null) && !(node is ClassDeclarationSyntax))
+                node = node.Parent;
+            
+            var parentClass = node as ClassDeclarationSyntax;
+
+            var baseTypes = parentClass.BaseList?.Types.Select(t => t.Type) ?? Enumerable.Empty<TypeSyntax>();
+
+            foreach (var baseType in baseTypes)
+            {
+                var baseTypeSymbol = context.SemanticModel.GetTypeInfo(baseType).Type;
+
+                if(baseTypeSymbol is null || baseTypeSymbol.TypeKind == TypeKind.Interface)
+                    continue;
+
+                if(InheritsFrom(baseTypeSymbol, aspNetCoreMvcControllerType))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool InheritsFrom(ITypeSymbol symbol, ITypeSymbol type)
+        {
+            var baseType = symbol;
+            while (baseType != null)
+            {
+                if (type.Equals(baseType))
+                    return true;
+
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
     }
 }

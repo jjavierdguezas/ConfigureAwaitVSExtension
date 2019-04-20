@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigureAwaitAnalyzer", "ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer.csproj", "{0606D20C-571B-4B0F-9DBF-398E716D84A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigureAwaitAnalyzer", "ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer.csproj", "{0606D20C-571B-4B0F-9DBF-398E716D84A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigureAwaitAnalyzer.Test", "ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer.Test\ConfigureAwaitAnalyzer.Test.csproj", "{B7D50B42-8299-43BC-A695-3A6945D9F6E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigureAwaitAnalyzer.Test", "ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer.Test\ConfigureAwaitAnalyzer.Test.csproj", "{B7D50B42-8299-43BC-A695-3A6945D9F6E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigureAwaitAnalyzer.Vsix", "ConfigureAwaitAnalyzer\ConfigureAwaitAnalyzer.Vsix\ConfigureAwaitAnalyzer.Vsix.csproj", "{A3A4004C-F5CD-48ED-B0A8-14A905726EF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A5609C9-4413-4AE1-8957-30D1C8CADAA3}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
