@@ -16,17 +16,17 @@ Meanwhile, enjoy it! 😉
 
 I used the Visual Studio Extensibility Template _Analyzer with Code Fix (.NET Standard)_.
 In theory, this extension can be deployed as either a NuGet package or a VSIX extension.
-It was tested using Microsoft Visual Studio 2019 Version 16.0.1
+It was tested using Microsoft Visual Studio 2019 Version 16.0.2
 
 ### The `ConfigureAwaitAnalyzer`
 
 It only runs if there are no compilation errors.
-It analyzes the `AwaitExpressionSyntax` nodes and check if their `string` representation ends with the text `".ConfigureAwait([true|false])"`
-That's it, just that
+It analyzes the `AwaitExpressionSyntax` nodes and check if their expression (method call or variable) is of type `ConfiguredTaskAwaitable`.
+That's it.
 
 ### The `ConfigureAwaitAnalyzerCodeFixProvider`
 
-It modifies the `AwaitExpressionSyntax`'`ExpressionNode` in order to add the `.ConfigureAwait([true|false])` expression nodes:
+It modifies the `AwaitExpressionSyntax`'s `ExpressionNode` in order to add the `.ConfigureAwait([true|false])` expression nodes:
 
 ![await expresion tree img](https://i.ibb.co/W2TzLsh/Await-Expression-Tree.png)
 
@@ -36,13 +36,13 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
 ## Todos
 
 - Check edge cases like:
-  - Await an already configured task (invoked as variable) :
+  - ~~Await an already configured task (invoked as variable) :~~
       ```csharp
       var task = MethodAsync().ConfigureAwait(false);
       var result = await task;  // <- this generates an unnecesary warning
                    ~~~~~~~~~~~
       ```
-  - Await calls in `Controller`'s `Action` in `ASP.NET Core` apps
+  - ~~Await calls in `Controller`'s `Action` in `ASP.NET Core` apps~~
       ```csharp
       class HomeController : Controller 
       {
@@ -54,7 +54,7 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
       }
       ```
 
-- Maybe do something smarter than just check the suffix on the `string` representation
+- ~~Maybe do something smarter than just check the suffix on the `string` representation~~
 - Allow user settings to:
   - activate/deactivate the extension
   - change if the extension should report Warnings or Errors
@@ -65,6 +65,7 @@ There are two code fixes: 'Add `ConfigureAwait(false)`' and 'Add `ConfigureAwait
 - [Starting to Develop Visual Studio Extensions](https://docs.microsoft.com/en-us/visualstudio/extensibility/starting-to-develop-visual-studio-extensions?view=vs-2019)
 - [How To Write a C# Analyzer and Code Fix](https://github.com/dotnet/roslyn/wiki/How-To-Write-a-C%23-Analyzer-and-Code-Fix)
 - [How to upgrade extensions to support Visual Studio 2019](https://devblogs.microsoft.com/visualstudio/how-to-upgrade-extensions-to-support-visual-studio-2019/)
+- [Working with types in a Roslyn analyzer](https://www.meziantou.net/2019/02/04/working-with-types-in-a-roslyn-analyzer)
 
 ## Releases
 
