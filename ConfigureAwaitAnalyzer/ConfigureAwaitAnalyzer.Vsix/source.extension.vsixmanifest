@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ConfigureAwaitAnalyzer.bc701ab2-6051-483e-9efc-c55faf88c90f" Version="1.0" Language="en-US" Publisher="JJ"/>
+        <Identity Id="ConfigureAwaitAnalyzer.bc701ab2-6051-483e-9efc-c55faf88c90f" Version="0.1.1" Language="en-US" Publisher="JJ"/>
         <DisplayName>ConfigureAwaitAnalyzer</DisplayName>
-        <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
+        <Description xml:space="preserve">A Visual Studio extension that warn to configure an awaiter in await calls</Description>
+        <Preview>true</Preview>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[15.0,)" />
