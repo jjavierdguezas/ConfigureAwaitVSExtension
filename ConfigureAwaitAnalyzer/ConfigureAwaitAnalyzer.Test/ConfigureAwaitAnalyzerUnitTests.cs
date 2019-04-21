@@ -271,7 +271,7 @@ namespace TestApp
             VerifyCSharpDiagnostic(test, expected1, expected2);
         }
 
-        
+
         [TestMethod]
         public void WhenThereIsCodeToFix_ThenItGetFixed()
         {
@@ -318,7 +318,7 @@ namespace ConsoleApp2
     }
 }
 ";
-            
+
 
             var fixtest = @"
 using System;

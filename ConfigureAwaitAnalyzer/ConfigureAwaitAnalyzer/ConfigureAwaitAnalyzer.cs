@@ -41,7 +41,7 @@ namespace ConfigureAwaitAnalyzer
 
             bool isAspNetCore = !(aspNetCoreMvcControllerType is null);
 
-            if(isAspNetCore && IsAspNetCoreControllerContext(context, aspNetCoreMvcControllerType))
+            if (isAspNetCore && IsAspNetCoreControllerContext(context, aspNetCoreMvcControllerType))
                 return;
 
             var node = (AwaitExpressionSyntax)context.Node;
@@ -71,16 +71,16 @@ namespace ConfigureAwaitAnalyzer
 
             if (Equals(typeWithoutGenerics, AwaiterConfiguredType))
                 return;
-                
+
             context.ReportDiagnostic(Diagnostic.Create(Rule, node.GetLocation(), node.ToString()));
         }
 
         private static bool IsAspNetCoreControllerContext(SyntaxNodeAnalysisContext context, INamedTypeSymbol aspNetCoreMvcControllerType)
         {
-            var node  = context.Node;   
-            while(!(node is null) && !(node is ClassDeclarationSyntax))
+            var node = context.Node;
+            while (!(node is null) && !(node is ClassDeclarationSyntax))
                 node = node.Parent;
-            
+
             var parentClass = node as ClassDeclarationSyntax;
 
             var baseTypes = parentClass.BaseList?.Types.Select(t => t.Type) ?? Enumerable.Empty<TypeSyntax>();
@@ -89,10 +89,10 @@ namespace ConfigureAwaitAnalyzer
             {
                 var baseTypeSymbol = context.SemanticModel.GetTypeInfo(baseType).Type;
 
-                if(baseTypeSymbol is null || baseTypeSymbol.TypeKind == TypeKind.Interface)
+                if (baseTypeSymbol is null || baseTypeSymbol.TypeKind == TypeKind.Interface)
                     continue;
 
-                if(InheritsFrom(baseTypeSymbol, aspNetCoreMvcControllerType))
+                if (InheritsFrom(baseTypeSymbol, aspNetCoreMvcControllerType))
                     return true;
             }
 
